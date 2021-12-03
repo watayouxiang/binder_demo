@@ -5,10 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.watayouxiang.demo.ipclib.ClassId;
 import com.watayouxiang.demo.ipclib.WtBinderInterface;
 import com.watayouxiang.demo.ipclib.WtServiceManager;
+import com.watayouxiang.demo.ipclib.bean.RequestBean;
+import com.watayouxiang.demo.ipclib.bean.RequestParameter;
+import com.watayouxiang.demo.ipclib.cache.CacheCenter;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * <pre>
@@ -24,6 +33,8 @@ public class WtBinderIPC {
 
     private Context sContext;
     private WtBinderInterface wtBinderInterface;
+    private CacheCenter cacheCenter = CacheCenter.getInstance();
+    private static final Gson GSON = new Gson();
 
     // ====================================================================================
     // 单例
@@ -36,20 +47,8 @@ public class WtBinderIPC {
     }
 
     // ====================================================================================
-    // 服务注册
-    // ====================================================================================
-
-    public void register(Class<?> clazz) {
-
-    }
-
-    // ====================================================================================
     // 开启服务
     // ====================================================================================
-
-    private void init(Context context) {
-        sContext = context.getApplicationContext();
-    }
 
     public void open(Context context) {
         open(context, null);
@@ -58,6 +57,10 @@ public class WtBinderIPC {
     public void open(Context context, String packageName) {
         init(context);
         bind(context.getApplicationContext(), packageName, WtServiceManager.class);
+    }
+
+    private void init(Context context) {
+        sContext = context.getApplicationContext();
     }
 
     private void bind(Context context, String packageName, Class<? extends WtServiceManager> service) {
@@ -85,4 +88,69 @@ public class WtBinderIPC {
 
         }
     }
+
+    // ====================================================================================
+    // 服务注册
+    // ====================================================================================
+
+    public void register(Class<?> clazz) {
+        cacheCenter.register(clazz);
+    }
+
+    // ====================================================================================
+    // 服务发现 / 服务调用
+    // ====================================================================================
+
+    public <T> T getInstance(Class<T> clazz, Object... parameters) {
+        // 服务获取
+        sendRequest(clazz, null, parameters, WtServiceManager.TYPE_GET);
+        return getProxy(clazz);
+    }
+
+    private <T> T getProxy(Class<T> clazz) {
+        ClassLoader classLoader = sContext.getClassLoader();
+        return (T) Proxy.newProxyInstance(classLoader, new Class[]{clazz}, new WtBinderProxy(clazz));
+    }
+
+    /**
+     * 服务获取 / 服务调用
+     *
+     * @param clazz      类名
+     * @param method     方法
+     * @param parameters 方法参数
+     * @param type       类型（1服务获取；2服务调用）
+     */
+    public <T> String sendRequest(Class<T> clazz, Method method, Object[] parameters, int type) {
+        // 类名
+        String className = clazz.getAnnotation(ClassId.class).value();
+        // 方法名
+        String methodName = method == null ? "getInstance" : method.getName();
+
+        // 封装请求参数
+        RequestParameter[] requestParameters = null;
+        if (parameters != null && parameters.length > 0) {
+            requestParameters = new RequestParameter[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                Object parameter = parameters[i];
+                String parameterClassName = parameter.getClass().getName();
+                String parameterValue = GSON.toJson(parameter);
+                RequestParameter requestParameter = new RequestParameter(parameterClassName, parameterValue);
+                requestParameters[i] = requestParameter;
+            }
+        }
+
+        // 请求模型
+        RequestBean requestBean = new RequestBean(type, className, methodName, requestParameters);
+        String request = GSON.toJson(requestBean);
+
+        // 做真正的请求
+        String respoce = null;
+        try {
+            respoce = wtBinderInterface.reuqest(request);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return respoce;
+    }
+
 }
