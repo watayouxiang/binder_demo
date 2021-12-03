@@ -1,2 +1,3 @@
 rootProject.name = "Binder Demo Android"
 include ':app'
+include ':ipclib'
