@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BinderDemoAndroid">
         <activity
+            android:name=".SecondActivity"
+            android:exported="false"
+            android:process=":f"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

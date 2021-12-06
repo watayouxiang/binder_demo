@@ -2,4 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.watayouxiang.demo.ipclib">
 
+    <application>
+        <service
+            android:name=".WtServiceManager"
+            android:exported="true" />
+    </application>
 </manifest>
