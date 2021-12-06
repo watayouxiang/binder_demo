@@ -17,18 +17,18 @@ public class SecondActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
-    }
-
-    public void invoke(View view) {
         // 开启服务
         WtBinderIPC.getDefault().open(this);
+    }
 
+    public void findService(View view) {
         // 发现服务
         downloadSingleton = WtBinderIPC.getDefault().getInstance(DownloadSingleton.class);
+    }
 
+    public void callService(View view) {
         // 调用服务
         String result = downloadSingleton.download("https://www.baidu.com");
         Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
-
     }
 }

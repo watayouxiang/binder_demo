@@ -18,9 +18,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
-
-    public void invoke(View view) {
         // 开启服务
         WtBinderIPC.getDefault().open(this);
         // 注册服务
