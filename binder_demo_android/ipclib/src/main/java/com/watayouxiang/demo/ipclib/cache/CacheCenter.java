@@ -110,6 +110,11 @@ public class CacheCenter {
         return null;
     }
 
+    /**
+     * 获取方法签名
+     * <p>
+     * ex: 方法名-参数1类型-参数2类型
+     */
     private String getMethodParameters(RequestBean requestBean) {
         StringBuilder result = new StringBuilder();
         result.append(requestBean.getMethodName());
@@ -124,7 +129,7 @@ public class CacheCenter {
     }
 
     // ====================================================================================
-    // 根据类名反射出类
+    // 根据类全名 反射出 类对象
     // ====================================================================================
 
     public Class<?> getClassType(String parameterClassName) {

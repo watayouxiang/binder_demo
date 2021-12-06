@@ -43,8 +43,8 @@ public class WtServiceManager extends Service {
                 switch (type) {
                     case TYPE_GET:
                         Method method = cacheCenter.getMethod(requestBean);
-                        Object[] parameters = makeParameterObject(requestBean);
                         if (method != null) {
+                            Object[] parameters = makeParameterObject(requestBean);
                             try {
                                 Object object = method.invoke(null, parameters);
                                 if (object != null) {
@@ -58,16 +58,18 @@ public class WtServiceManager extends Service {
                         }
                         break;
                     case TYPE_INVOKE:
-                        Object object = cacheCenter.getObject(requestBean.getClassName());
                         Method method1 = cacheCenter.getMethod(requestBean);
-                        Object[] parameters1 = makeParameterObject(requestBean);
-                        try {
-                            Object result = method1.invoke(object, parameters1);
-                            return gson.toJson(result);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
+                        if (method1 != null) {
+                            Object instance = cacheCenter.getObject(requestBean.getClassName());
+                            Object[] parameters1 = makeParameterObject(requestBean);
+                            try {
+                                Object result = method1.invoke(instance, parameters1);
+                                return gson.toJson(result);
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            } catch (InvocationTargetException e) {
+                                e.printStackTrace();
+                            }
                         }
                         break;
                 }
@@ -76,6 +78,7 @@ public class WtServiceManager extends Service {
         };
     }
 
+    // 构造方法参数数组
     private Object[] makeParameterObject(RequestBean requestBean) {
         Object[] parameters;
         RequestParameter[] requestParameters = requestBean.getRequestParameters();

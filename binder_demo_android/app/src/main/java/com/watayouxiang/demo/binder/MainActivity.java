@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.watayouxiang.demo.binder.ipc.DownloadSingleton;
+import com.watayouxiang.demo.binder.ipc.DownloadSingletonImpl;
 import com.watayouxiang.demo.binder.ipc.UserInfo;
 import com.watayouxiang.demo.binder.ipc.UserSingleton;
 import com.watayouxiang.demo.binder.ipc.UserSingletonImpl;
@@ -21,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
         // 开启服务
         WtBinderIPC.getDefault().open(this);
         // 注册服务
-        WtBinderIPC.getDefault().register(DownloadSingleton.class);
-        WtBinderIPC.getDefault().register(UserSingleton.class);
+        WtBinderIPC.getDefault().register(DownloadSingletonImpl.class);
+        WtBinderIPC.getDefault().register(UserSingletonImpl.class);
         UserSingletonImpl.getInstance().setUserInfo(new UserInfo("123", "watayouxiang"));
     }
 
