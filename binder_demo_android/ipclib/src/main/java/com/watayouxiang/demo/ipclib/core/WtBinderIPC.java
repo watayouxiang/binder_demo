@@ -146,7 +146,7 @@ public class WtBinderIPC {
         // 做真正的请求
         String respoce = null;
         try {
-            respoce = wtBinderInterface.reuqest(request);
+            respoce = wtBinderInterface.request(request);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

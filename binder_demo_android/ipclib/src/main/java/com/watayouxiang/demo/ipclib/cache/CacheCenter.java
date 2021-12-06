@@ -1,5 +1,8 @@
 package com.watayouxiang.demo.ipclib.cache;
 
+import com.watayouxiang.demo.ipclib.bean.RequestBean;
+import com.watayouxiang.demo.ipclib.bean.RequestParameter;
+
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -16,6 +19,7 @@ public class CacheCenter {
     private final ConcurrentHashMap<String, Class<?>> mClassMap;
     // key = className; value = [方法签名 : method]
     private final ConcurrentHashMap<String, ConcurrentHashMap<String, Method>> mAllMethodMap;
+    // key = 类名; value = 实例化对象
     private final ConcurrentHashMap<String, Object> mInstanceObjectMap;
 
     // ====================================================================================
@@ -32,6 +36,18 @@ public class CacheCenter {
         mClassMap = new ConcurrentHashMap<>();
         mAllMethodMap = new ConcurrentHashMap<>();
         mInstanceObjectMap = new ConcurrentHashMap<>();
+    }
+
+    // ====================================================================================
+    // 实例化对象的存取
+    // ====================================================================================
+
+    public void putObject(String className, Object instance) {
+        mInstanceObjectMap.put(className, instance);
+    }
+
+    public Object getObject(String className) {
+        return mInstanceObjectMap.get(className);
     }
 
     // ====================================================================================
@@ -81,4 +97,42 @@ public class CacheCenter {
         return builder.toString();
     }
 
+    // ====================================================================================
+    // 查找方法
+    // ====================================================================================
+
+    public Method getMethod(RequestBean requestBean) {
+        ConcurrentHashMap<String, Method> map = mAllMethodMap.get(requestBean.getClassName());
+        if (map != null) {
+            String key = getMethodParameters(requestBean);
+            return map.get(key);
+        }
+        return null;
+    }
+
+    private String getMethodParameters(RequestBean requestBean) {
+        StringBuilder result = new StringBuilder();
+        result.append(requestBean.getMethodName());
+        RequestParameter[] requestParameters = requestBean.getRequestParameters();
+        if (requestParameters == null || requestParameters.length == 0) {
+            return result.toString();
+        }
+        for (int i = 0; i < requestParameters.length; ++i) {
+            result.append("-").append(requestParameters[i].getParameterClassName());
+        }
+        return result.toString();
+    }
+
+    // ====================================================================================
+    // 根据类名反射出类
+    // ====================================================================================
+
+    public Class<?> getClassType(String parameterClassName) {
+        try {
+            return Class.forName(parameterClassName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

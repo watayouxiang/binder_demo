@@ -5,6 +5,10 @@
     <application>
         <service
             android:name=".WtServiceManager"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.watayouxiang.demo.ipclib.WtServiceManager"/>
+            </intent-filter>
+        </service>
     </application>
 </manifest>
