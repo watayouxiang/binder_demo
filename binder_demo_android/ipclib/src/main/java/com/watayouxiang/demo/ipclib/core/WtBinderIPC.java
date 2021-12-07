@@ -9,6 +9,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.watayouxiang.demo.ipclib.BpBinder;
 import com.watayouxiang.demo.ipclib.ClassId;
 import com.watayouxiang.demo.ipclib.WtBinderInterface;
 import com.watayouxiang.demo.ipclib.WtServiceManager;
@@ -109,7 +110,7 @@ public class WtBinderIPC {
 
     private <T> T getProxy(Class<T> clazz) {
         ClassLoader classLoader = sContext.getClassLoader();
-        return (T) Proxy.newProxyInstance(classLoader, new Class[]{clazz}, new WtBinderProxy(clazz));
+        return (T) Proxy.newProxyInstance(classLoader, new Class[]{clazz}, new BpBinder(clazz));
     }
 
     /**

@@ -1,10 +1,11 @@
-package com.watayouxiang.demo.ipclib.core;
+package com.watayouxiang.demo.ipclib;
 
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.watayouxiang.demo.ipclib.WtServiceManager;
+import com.watayouxiang.demo.ipclib.core.WtBinderIPC;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -17,11 +18,11 @@ import java.lang.reflect.Method;
  *     desc   : 服务代理
  * </pre>
  */
-class WtBinderProxy implements InvocationHandler {
+public class BpBinder implements InvocationHandler {
     private static final Gson GSON = new Gson();
     private final Class<?> clazz;
 
-    public WtBinderProxy(Class<?> clazz) {
+    public BpBinder(Class<?> clazz) {
         this.clazz = clazz;
     }
 

@@ -31,6 +31,7 @@ public class WtServiceManager extends Service {
 
     private static final Gson gson = new Gson();
     private static final CacheCenter cacheCenter = CacheCenter.getInstance();
+    private static final BBBinder bbBinder = new BBBinder();
 
     @Nullable
     @Override
@@ -45,15 +46,9 @@ public class WtServiceManager extends Service {
                         Method method = cacheCenter.getMethod(requestBean);
                         if (method != null) {
                             Object[] parameters = makeParameterObject(requestBean);
-                            try {
-                                Object object = method.invoke(null, parameters);
-                                if (object != null) {
-                                    cacheCenter.putObject(requestBean.getClassName(), object);
-                                }
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
+                            Object object = bbBinder.onTransact(method, parameters);
+                            if (object != null) {
+                                cacheCenter.putObject(requestBean.getClassName(), object);
                             }
                         }
                         break;
