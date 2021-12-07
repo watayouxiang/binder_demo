@@ -12,10 +12,10 @@ import java.lang.reflect.Method;
  * </pre>
  */
 public class BBBinder {
-    public Object onTransact(Method method, Object[] parameters) {
+    public Object onTransact(Object obj, Method method, Object[] parameters) {
         Object object = null;
         try {
-            object = method.invoke(null, parameters);
+            object = method.invoke(obj, parameters);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

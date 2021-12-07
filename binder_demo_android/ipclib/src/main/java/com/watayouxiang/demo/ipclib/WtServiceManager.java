@@ -46,7 +46,7 @@ public class WtServiceManager extends Service {
                         Method method = cacheCenter.getMethod(requestBean);
                         if (method != null) {
                             Object[] parameters = makeParameterObject(requestBean);
-                            Object object = bbBinder.onTransact(method, parameters);
+                            Object object = bbBinder.onTransact(null, method, parameters);
                             if (object != null) {
                                 cacheCenter.putObject(requestBean.getClassName(), object);
                             }
@@ -57,14 +57,8 @@ public class WtServiceManager extends Service {
                         if (method1 != null) {
                             Object instance = cacheCenter.getObject(requestBean.getClassName());
                             Object[] parameters1 = makeParameterObject(requestBean);
-                            try {
-                                Object result = method1.invoke(instance, parameters1);
-                                return gson.toJson(result);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InvocationTargetException e) {
-                                e.printStackTrace();
-                            }
+                            Object result = bbBinder.onTransact(instance, method1, parameters1);
+                            return gson.toJson(result);
                         }
                         break;
                 }
