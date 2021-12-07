@@ -9,7 +9,6 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.watayouxiang.demo.ipclib.BpBinder;
 import com.watayouxiang.demo.ipclib.ClassId;
 import com.watayouxiang.demo.ipclib.WtBinderInterface;
 import com.watayouxiang.demo.ipclib.WtServiceManager;

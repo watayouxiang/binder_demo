@@ -1,4 +1,4 @@
-package com.watayouxiang.demo.ipclib;
+package com.watayouxiang.demo.ipclib.core;
 
 import android.text.TextUtils;
 import android.util.Log;
