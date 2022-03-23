@@ -18,11 +18,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // 开启服务
-        WtBinderIPC.getDefault().open(this, "com.watayouxiang.demo.binder");
     }
 
     public void findService(View view) {
+        // 开启服务
+        WtBinderIPC.getDefault().open(this, "com.watayouxiang.demo.binder");
         // 发现服务
         userSingleton = WtBinderIPC.getDefault().getInstance(UserSingleton.class);
     }
