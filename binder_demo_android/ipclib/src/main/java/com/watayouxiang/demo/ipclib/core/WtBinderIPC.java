@@ -68,11 +68,13 @@ public class WtBinderIPC {
         if (TextUtils.isEmpty(packageName)) {
             intent = new Intent(context, service);
         } else {
+            intent = new Intent();
+            // 设置component
             String serviceName = service.getName();
             ComponentName component = new ComponentName(packageName, serviceName);
-            intent = new Intent();
             intent.setComponent(component);
-            intent.setAction(service.getName());
+            // 设置action
+            intent.setAction(serviceName);
         }
         WtServiceConnection wtServiceConnection = new WtServiceConnection();
         context.bindService(intent, wtServiceConnection, Context.BIND_AUTO_CREATE);
