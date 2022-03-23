@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  *     desc   :
  * </pre>
  */
-public class BBBinder {
+public class BBinder {
     public Object onTransact(Object obj, Method method, Object[] parameters) {
         Object object = null;
         try {

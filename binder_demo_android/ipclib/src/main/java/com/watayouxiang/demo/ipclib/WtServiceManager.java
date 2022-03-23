@@ -12,7 +12,6 @@ import com.watayouxiang.demo.ipclib.bean.RequestBean;
 import com.watayouxiang.demo.ipclib.bean.RequestParameter;
 import com.watayouxiang.demo.ipclib.cache.CacheCenter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -31,7 +30,7 @@ public class WtServiceManager extends Service {
 
     private static final Gson gson = new Gson();
     private static final CacheCenter cacheCenter = CacheCenter.getInstance();
-    private static final BBBinder bbBinder = new BBBinder();
+    private static final BBinder bBinder = new BBinder();
 
     @Nullable
     @Override
@@ -46,7 +45,7 @@ public class WtServiceManager extends Service {
                         Method method = cacheCenter.getMethod(requestBean);
                         if (method != null) {
                             Object[] parameters = makeParameterObject(requestBean);
-                            Object object = bbBinder.onTransact(null, method, parameters);
+                            Object object = bBinder.onTransact(null, method, parameters);
                             if (object != null) {
                                 cacheCenter.putObject(requestBean.getClassName(), object);
                             }
@@ -57,7 +56,7 @@ public class WtServiceManager extends Service {
                         if (method1 != null) {
                             Object instance = cacheCenter.getObject(requestBean.getClassName());
                             Object[] parameters1 = makeParameterObject(requestBean);
-                            Object result = bbBinder.onTransact(instance, method1, parameters1);
+                            Object result = bBinder.onTransact(instance, method1, parameters1);
                             return gson.toJson(result);
                         }
                         break;
