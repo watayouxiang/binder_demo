@@ -15,11 +15,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // 开启服务
+        WtBinderIPC.getDefault().open(this);
     }
 
     public void registerService(View view) {
-        // 开启服务
-        WtBinderIPC.getDefault().open(this);
         // 注册服务
         WtBinderIPC.getDefault().register(UserSingletonImpl.class);
         UserSingletonImpl.getInstance().setUserInfo(new UserInfo("123", "watayouxiang"));

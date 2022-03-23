@@ -68,7 +68,8 @@ public class WtBinderIPC {
         if (TextUtils.isEmpty(packageName)) {
             intent = new Intent(context, service);
         } else {
-            ComponentName component = new ComponentName(packageName, service.getName());
+            String serviceName = service.getName();
+            ComponentName component = new ComponentName(packageName, serviceName);
             intent = new Intent();
             intent.setComponent(component);
             intent.setAction(service.getName());
