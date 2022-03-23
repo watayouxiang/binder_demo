@@ -10,7 +10,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="goOtherProcess"
-        android:text="other process" />
+        android:onClick="registerService"
+        android:text="注册服务" />
 
 </LinearLayout>

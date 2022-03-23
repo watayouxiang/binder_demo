@@ -141,16 +141,16 @@ public class WtBinderIPC {
 
         // 请求模型
         RequestBean requestBean = new RequestBean(type, className, methodName, requestParameters);
-        String request = GSON.toJson(requestBean);
+        String msg = GSON.toJson(requestBean);
 
         // 做真正的请求
-        String respoce = null;
+        String resp = null;
         try {
-            respoce = wtBinderInterface.request(request);
+            resp = wtBinderInterface.request(msg);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        return respoce;
+        return resp;
     }
 
 }
