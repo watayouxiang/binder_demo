@@ -4,7 +4,7 @@
 
     <application>
         <service
-            android:name=".WtServiceManager"
+            android:name="com.watayouxiang.demo.ipclib.WtServiceManager"
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.watayouxiang.demo.ipclib.WtServiceManager"/>
